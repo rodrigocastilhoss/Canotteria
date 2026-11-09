@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CANOTTERIA | Pizza Artigianale Contemporanea</title>
+  <title>CANOTTERIA | Cardápio Digital</title>
 
   <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
               gold: '#C59B5F',
               goldLight: '#E8CA9B',
               rosso: '#8F1D18',
-              dark: '#111111',
+              dark: '#0d0c0c',
               cream: '#F7F4EE',
               charcoal: '#1A1817'
             }
@@ -51,6 +51,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
+    /* Ambient animated mesh background (Skylrk inspired) */
     #ambient-bg {
       position: fixed;
       inset: -20%;
@@ -58,13 +59,14 @@
       height: 140vh;
       pointer-events: none;
       z-index: 0;
-      filter: blur(85px);
-      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), background 1s ease-in-out;
+      filter: blur(90px);
+      transition: background 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.1s ease;
       transform: translateZ(0);
       will-change: transform, background;
-      opacity: 0.9;
+      opacity: 0.92;
     }
 
+    /* Tactile noise texture overlay */
     .bg-noise {
       position: fixed;
       inset: 0;
@@ -74,6 +76,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
+    /* Fullscreen Vertical Scroll-Snap Container */
     .snap-container {
       scroll-snap-type: y mandatory;
       overflow-y: scroll;
@@ -96,302 +99,627 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       position: relative;
-      padding: 5rem 1.25rem 2rem 1.25rem;
+      padding: 4.5rem 1.25rem 2rem 1.25rem;
+      overflow: hidden;
     }
 
+    /* Floating Pizza Animation */
     @keyframes subtleFloat {
       0%, 100% {
         transform: translateY(0px) rotate(0deg) scale(1);
       }
       50% {
-        transform: translateY(-8px) rotate(1.2deg) scale(1.015);
+        transform: translateY(-10px) rotate(1.2deg) scale(1.018);
       }
     }
 
     .floating-pizza {
       animation: subtleFloat 7s ease-in-out infinite;
-      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform;
     }
 
+    /* Contact shadow below floating pizza */
     .pizza-shadow {
       position: absolute;
-      bottom: -6%;
-      left: 10%;
-      right: 10%;
-      height: 38px;
-      background: radial-gradient(ellipse at center, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 80%);
-      filter: blur(14px);
+      bottom: -7%;
+      left: 12%;
+      right: 12%;
+      height: 40px;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.25) 52%, rgba(0,0,0,0) 80%);
+      filter: blur(15px);
       z-index: -1;
       transform: scale(0.95);
       animation: shadowPulse 7s ease-in-out infinite;
+      pointer-events: none;
     }
 
     @keyframes shadowPulse {
-      0%, 100% { transform: scale(0.92); opacity: 0.65; }
-      50% { transform: scale(1.05); opacity: 0.45; }
+      0%, 100% { transform: scale(0.92); opacity: 0.7; }
+      50% { transform: scale(1.06); opacity: 0.45; }
     }
 
+    /* When pizza details card is expanded, shift pizza slightly up on smaller screens */
+    .snap-section.details-open .pizza-stage {
+      transform: translateY(-14%) scale(0.86);
+    }
+    @media (min-height: 820px) {
+      .snap-section.details-open .pizza-stage {
+        transform: translateY(-11%) scale(0.9);
+      }
+    }
+
+    .pizza-stage {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    /* Translucent Glass Surfaces */
     .glass-pill {
-      background: rgba(25, 23, 22, 0.45);
+      background: rgba(24, 22, 21, 0.55);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-panel {
+      background: rgba(20, 18, 17, 0.72);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
 
     .glass-header {
-      background: linear-gradient(180deg, rgba(14, 13, 13, 0.75) 0%, rgba(14, 13, 13, 0) 100%);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(13, 12, 12, 0.68) 0%, rgba(13, 12, 12, 0) 100%);
     }
 
-    .phone-simulator-frame {
-      max-width: 440px;
-      height: 90vh;
-      max-height: 880px;
-      border-radius: 48px;
-      box-shadow: 0 25px 70px -15px rgba(0, 0, 0, 0.8), 0 0 0 12px #22201e, 0 0 0 14px rgba(255,255,255,0.06);
-      overflow: hidden;
-      position: relative;
+    /* Expandable Details Panel Transitions */
+    .details-card {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(24px) scale(0.96);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .snap-section.details-open .details-card {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Cart Badge Pulse */
+    @keyframes badgePop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.32); }
+      100% { transform: scale(1); }
+    }
+    .badge-pop {
+      animation: badgePop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
   </style>
 </head>
-<body class="bg-[#0c0b0b] text-[#F7F4EE] select-none antialiased flex items-center justify-center min-h-screen">
+<body class="bg-[#0d0c0c] text-[#F7F4EE] select-none antialiased min-h-screen">
 
+  <!-- Dynamic Ambient Background Glow -->
   <div id="ambient-bg"></div>
   <div class="bg-noise"></div>
 
-  <!-- Desktop Controls: Switch between Phone Simulator & Fullscreen Mode -->
-  <div class="hidden lg:flex fixed top-4 right-6 z-50 items-center gap-2 glass-pill px-3 py-1.5 rounded-full text-xs text-white/70">
-    <span>Visualização:</span>
-    <button id="btn-toggle-frame" class="px-2.5 py-1 rounded-full bg-white/10 text-white font-medium hover:bg-white/20 transition-all flex items-center gap-1.5">
-      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-      <span id="btn-frame-text">Modo Mobile</span>
-    </button>
-  </div>
+  <!-- Main Wrapper -->
+  <main id="app-wrapper" class="w-full h-full relative overflow-hidden">
 
-  <main id="app-wrapper" class="w-full h-full relative transition-all duration-500 overflow-hidden">
+    <!-- 1. TOPO DA PÁGINA (Header Fixo Limpo e Flutuante) -->
+    <header class="fixed top-0 left-0 w-full z-40 glass-header pt-5 pb-4 px-5 sm:px-8 flex items-center justify-between pointer-events-none">
+      <!-- Espaçador esquerdo para manter o título rigorosamente centralizado -->
+      <div class="w-10 h-10"></div>
 
-    <!-- Fixed Header -->
-    <header class="fixed top-0 left-0 w-full z-40 glass-header pt-4 pb-3 px-5 sm:px-8 flex items-center justify-between pointer-events-auto">
-      <div class="flex flex-col items-start cursor-pointer" onclick="scrollToIndex(0)">
-        <div class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-canotto-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13c3 3 15 3 18 0M7 8l10 8M14 7l-4 10" />
-          </svg>
-          <span class="font-serif text-lg tracking-[0.28em] font-semibold text-white uppercase">CANOTTERIA</span>
-        </div>
-        <span class="text-[9px] uppercase tracking-[0.35em] text-canotto-gold font-light pl-0.5 opacity-90">Pizza Artigianale</span>
-      </div>
+      <!-- Título CANOTTERIA perfeitamente centralizado em tipografia serifada elegante -->
+      <button type="button" onclick="scrollToIndex(0)" class="pointer-events-auto absolute left-1/2 -translate-x-1/2 text-center focus:outline-none group" aria-label="Voltar ao início">
+        <span class="font-serif text-xl sm:text-2xl tracking-[0.32em] font-semibold text-white uppercase transition-opacity group-hover:opacity-85 pl-[0.32em]">
+          CANOTTERIA
+        </span>
+      </button>
 
-      <div class="flex items-center gap-2">
-        <button id="btn-open-prep" class="glass-pill text-[11px] uppercase tracking-wider text-white/80 hover:text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all hover:border-canotto-gold/40">
-          <svg class="w-3.5 h-3.5 text-canotto-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span class="hidden sm:inline">Modo de</span> Preparo
-        </button>
-
-        <a id="btn-direct-contact" href="https://api.whatsapp.com/send?phone=5551999999999&text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20a%20disponibilidade%20das%20pizzas%20Canotteria!" target="_blank" rel="noopener noreferrer" class="glass-pill p-2 sm:px-3 sm:py-1.5 rounded-full text-white/90 hover:text-white flex items-center gap-1.5 hover:border-canotto-gold/40 transition-all" title="Falar no WhatsApp">
-          <svg class="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-          </svg>
-          <span class="hidden sm:inline text-xs font-medium">Fazer Pedido</span>
-        </a>
-      </div>
+      <!-- Botão circular discreto para o carrinho de compras no canto direito com badge numérico -->
+      <button id="btn-open-cart" type="button" onclick="openCart()" class="pointer-events-auto w-10 h-10 rounded-full glass-pill flex items-center justify-center text-white/90 hover:text-white hover:border-canotto-gold/50 active:scale-95 transition-all relative shadow-lg" aria-label="Abrir carrinho de compras">
+        <svg class="w-4 h-4 text-canotto-gold" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        </svg>
+        <span id="cart-badge" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-canotto-gold text-[#111111] font-sans text-[10px] font-bold flex items-center justify-center shadow-md transition-transform">
+          0
+        </span>
+      </button>
     </header>
 
-    <!-- Side Vertical Progress Bar -->
-    <div class="fixed right-3.5 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2.5 pointer-events-none">
+    <!-- Indicadores Verticais Discretos (Navegação Scroll-Snap) -->
+    <div class="fixed right-3.5 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-2.5 pointer-events-none">
       <div id="dots-container" class="flex flex-col gap-2 pointer-events-auto"></div>
     </div>
 
-    <!-- Scroll Snap Container -->
+    <!-- 2. VISUALIZAÇÃO INICIAL DAS PIZZAS (Clean First - 100vh por Pizza) -->
     <div id="pizza-scroller" class="snap-container">
 
-      <!-- PIZZA 1: MARGUERITA -->
-      <section class="snap-section" data-index="0" data-color="rosso" data-flavor="Marguerita" data-price="R$ 54,00">
-        <div class="pt-4 flex flex-col items-center text-center opacity-85">
-          <span class="text-[10px] tracking-[0.3em] uppercase text-canotto-gold font-medium">01 &bull; Tradizione Napoletana</span>
-        </div>
-
-        <div class="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square flex items-center justify-center my-auto cursor-pointer pizza-interactive-container">
+      <!-- 01 • NAPOLI -->
+      <section class="snap-section" data-index="0" data-id="napoli" data-color="rosso">
+        <div class="pizza-stage relative w-full max-w-[300px] sm:max-w-[360px] md:max-w-[390px] aspect-square flex items-center justify-center cursor-pointer pizza-interactive-container" onclick="togglePizzaDetails(0)" role="button" tabindex="0" aria-label="Ver detalhes da pizza Napoli">
           <div class="pizza-shadow"></div>
-          <div class="floating-pizza w-full h-full flex items-center justify-center">
-            <img src="fotos/marguerita.png" 
-                 alt="Pizza Marguerita Artesanal" 
-                 class="w-full h-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105" 
-                 onerror="this.classList.add('hidden');" />
+          <div class="floating-pizza w-full h-full flex items-center justify-center relative">
+            <img src="fotos/margherita.png"
+                 data-jpg="fotos/margherita.jpg"
+                 data-alt-png="fotos/marguerita.png"
+                 data-alt-jpg="fotos/marguerita.jpg"
+                 alt="Pizza Napoli"
+                 class="w-full h-full object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.65)] transition-transform duration-500 hover:scale-[1.03]"
+                 onerror="handlePizzaImageError(this)" />
+            <!-- Fallback SVG caso a foto não exista -->
+            <svg class="pizza-fallback-svg hidden w-full h-full drop-shadow-2xl transition-transform duration-500 hover:scale-[1.03]" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="crust-grad-1" cx="50%" cy="50%" r="50%">
+                  <stop offset="68%" stop-color="#C28641"/>
+                  <stop offset="85%" stop-color="#9C5E24"/>
+                  <stop offset="93%" stop-color="#5A2F0F"/>
+                  <stop offset="98%" stop-color="#2D1505"/>
+                </radialGradient>
+                <radialGradient id="sauce-grad-1" cx="45%" cy="45%" r="48%">
+                  <stop offset="0%" stop-color="#B8241D"/>
+                  <stop offset="65%" stop-color="#9A1B15"/>
+                  <stop offset="100%" stop-color="#72130F"/>
+                </radialGradient>
+                <filter id="fior-blur-1" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#3d1502" flood-opacity="0.35"/>
+                </filter>
+              </defs>
+              <circle cx="250" cy="250" r="235" fill="url(#crust-grad-1)" />
+              <g fill="#1F1007" opacity="0.82">
+                <ellipse cx="250" cy="22" rx="14" ry="7" transform="rotate(-5, 250, 22)"/>
+                <ellipse cx="380" cy="85" rx="18" ry="9" transform="rotate(32, 380, 85)"/>
+                <ellipse cx="455" cy="190" rx="12" ry="6" transform="rotate(75, 455, 190)"/>
+                <ellipse cx="440" cy="330" rx="20" ry="8" transform="rotate(120, 440, 330)"/>
+                <ellipse cx="320" cy="445" rx="16" ry="7" transform="rotate(160, 320, 445)"/>
+                <ellipse cx="160" cy="455" rx="22" ry="9" transform="rotate(-150, 160, 455)"/>
+                <ellipse cx="55" cy="340" rx="15" ry="8" transform="rotate(-110, 55, 340)"/>
+                <ellipse cx="42" cy="180" rx="19" ry="7" transform="rotate(-65, 42, 180)"/>
+                <ellipse cx="130" cy="70" rx="14" ry="7" transform="rotate(-25, 130, 70)"/>
+              </g>
+              <circle cx="250" cy="250" r="172" fill="url(#sauce-grad-1)" />
+              <path d="M160 210 Q210 180 250 210 T340 200" stroke="#7A130F" stroke-width="6" stroke-linecap="round" opacity="0.4" fill="none"/>
+              <path d="M180 290 Q240 270 290 310 T330 270" stroke="#7A130F" stroke-width="7" stroke-linecap="round" opacity="0.4" fill="none"/>
+              <g filter="url(#fior-blur-1)">
+                <path d="M220 180 C240 160 280 170 275 195 C270 215 240 220 220 205 Z" fill="#FDFCF7"/>
+                <path d="M165 240 C185 220 215 235 210 260 C205 285 170 280 160 260 Z" fill="#FAF6EC"/>
+                <path d="M270 260 C295 245 330 255 335 280 C340 305 300 315 280 300 Z" fill="#FDFBF4"/>
+                <path d="M205 315 C225 300 255 315 250 335 C245 350 215 345 205 330 Z" fill="#F8F3E5"/>
+                <path d="M300 190 C320 175 345 190 340 210 C335 225 310 220 300 205 Z" fill="#FDFCF7"/>
+                <path d="M175 160 C190 150 215 160 210 175 C205 185 185 185 175 175 Z" fill="#FDFCF7"/>
+              </g>
+              <g>
+                <path d="M250 250 C235 215 265 200 280 215 C290 230 275 255 250 250 Z" fill="#2E6930" stroke="#1D4A20" stroke-width="1.5"/>
+                <path d="M255 245 Q265 230 275 220" stroke="#488E4B" stroke-width="1.5" fill="none"/>
+                <path d="M190 210 C170 190 195 175 205 190 C215 205 200 220 190 210 Z" fill="#387C3B"/>
+                <path d="M265 285 C255 310 275 320 290 310 C300 295 285 280 265 285 Z" fill="#285E2A"/>
+                <path d="M315 240 C330 225 345 235 340 250 C330 260 315 250 315 240 Z" fill="#3D8240"/>
+              </g>
+              <circle cx="230" cy="225" r="3.5" fill="#E8B931" opacity="0.85"/>
+              <circle cx="285" cy="270" r="3" fill="#E8B931" opacity="0.9"/>
+              <circle cx="200" cy="290" r="2.5" fill="#E8B931" opacity="0.8"/>
+            </svg>
           </div>
         </div>
 
-        <div class="w-full max-w-sm flex flex-col items-center text-center pb-2 z-20">
-          <h2 class="font-serif text-3xl sm:text-4xl tracking-wide font-normal text-white">Marguerita</h2>
-          <p class="text-xs text-canotto-gold uppercase tracking-[0.2em] font-medium mt-1 mb-2">Canotto Alto &bull; 48h Fermentação</p>
-          <p class="text-xs sm:text-sm text-white/70 font-light leading-relaxed px-4 line-clamp-2 sm:line-clamp-none">
-            Molho artesanal de tomate San Marzano D.O.P., mozzarella Fior di Latte fresca, manjericão colhido no dia e fio de azeite extravirgem italiano.
+        <!-- 3. PAINEL TRANSLÚCIDO EXPANSÍVEL (Oculto inicialmente, abre ao clicar na pizza) -->
+        <div class="details-card absolute bottom-6 sm:bottom-8 w-[calc(100%-2rem)] max-w-md glass-panel rounded-3xl p-5 sm:p-6 z-20" onclick="event.stopPropagation()">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-[10px] uppercase tracking-[0.25em] text-canotto-gold font-medium block">01 &bull; Base Rossa</span>
+              <h2 class="font-serif text-3xl sm:text-4xl text-white font-normal tracking-wide mt-0.5">Napoli</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase tracking-widest text-white/45 block">Individual</span>
+              <span class="font-serif text-2xl sm:text-3xl font-semibold text-canotto-gold">R$ 54,00</span>
+            </div>
+          </div>
+
+          <p class="mt-3 text-xs sm:text-sm text-white/80 font-light leading-relaxed">
+            Molho de tomate pelado artesanal San Marzano D.O.P., mozzarella Fior di Latte fresca, folhas de manjericão fresco e azeite extravirgem.
           </p>
 
-          <div class="mt-4 flex items-center justify-between w-full px-4 pt-3 border-t border-white/10">
-            <div class="flex flex-col text-left">
-              <span class="text-[10px] uppercase tracking-wider text-white/50">Ultracongelada</span>
-              <span class="font-serif text-xl sm:text-2xl font-semibold text-canotto-gold">R$ 54,00</span>
-            </div>
-
-            <button onclick="orderPizza('Marguerita', 'R$ 54,00')" class="glass-pill bg-white/10 hover:bg-white/20 active:scale-95 text-white px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-medium flex items-center gap-2 border border-white/20 transition-all shadow-lg hover:border-canotto-gold">
-              <span>Pedir via WhatsApp</span>
-              <svg class="w-3.5 h-3.5 text-canotto-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <div class="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between gap-3">
+            <button type="button" onclick="togglePizzaDetails(0)" class="text-[11px] uppercase tracking-widest text-white/50 hover:text-white/80 transition-colors py-2 px-2">
+              Fechar
+            </button>
+            <button type="button" id="btn-add-napoli" onclick="addToCart('napoli')" class="flex-1 py-3 px-5 rounded-full bg-canotto-gold hover:bg-[#d4ab6e] active:scale-[0.98] text-[#111111] font-semibold text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 shadow-lg">
+              <span>Adicionar à Sacola</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
           </div>
         </div>
       </section>
 
-      <!-- PIZZA 2: CALABRESA -->
-      <section class="snap-section" data-index="1" data-color="terracotta" data-flavor="Calabresa" data-price="R$ 58,00">
-        <div class="pt-4 flex flex-col items-center text-center opacity-85">
-          <span class="text-[10px] tracking-[0.3em] uppercase text-canotto-gold font-medium">02 &bull; Cura Lenta & Defumação</span>
-        </div>
-
-        <div class="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square flex items-center justify-center my-auto cursor-pointer pizza-interactive-container">
+      <!-- 02 • MADRI -->
+      <section class="snap-section" data-index="1" data-id="madri" data-color="terracotta">
+        <div class="pizza-stage relative w-full max-w-[300px] sm:max-w-[360px] md:max-w-[390px] aspect-square flex items-center justify-center cursor-pointer pizza-interactive-container" onclick="togglePizzaDetails(1)" role="button" tabindex="0" aria-label="Ver detalhes da pizza Madri">
           <div class="pizza-shadow"></div>
-          <div class="floating-pizza w-full h-full flex items-center justify-center">
-            <img src="fotos/calabresa.png" 
-                 alt="Pizza Calabresa Artesanal" 
-                 class="w-full h-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105" 
-                 onerror="this.classList.add('hidden');" />
+          <div class="floating-pizza w-full h-full flex items-center justify-center relative">
+            <img src="fotos/calabresa-artesanal.png"
+                 data-jpg="fotos/calabresa-artesanal.jpg"
+                 data-alt-png="fotos/calabresa.png"
+                 data-alt-jpg="fotos/calabresa.jpg"
+                 alt="Pizza Madri"
+                 class="w-full h-full object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.65)] transition-transform duration-500 hover:scale-[1.03]"
+                 onerror="handlePizzaImageError(this)" />
+            <!-- Fallback SVG -->
+            <svg class="pizza-fallback-svg hidden w-full h-full drop-shadow-2xl transition-transform duration-500 hover:scale-[1.03]" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="crust-grad-2" cx="50%" cy="50%" r="50%">
+                  <stop offset="68%" stop-color="#BE7F3B"/>
+                  <stop offset="86%" stop-color="#91521C"/>
+                  <stop offset="94%" stop-color="#552B0E"/>
+                  <stop offset="98%" stop-color="#241103"/>
+                </radialGradient>
+                <radialGradient id="sauce-grad-2" cx="50%" cy="50%" r="48%">
+                  <stop offset="0%" stop-color="#B2231C"/>
+                  <stop offset="68%" stop-color="#8F1D18"/>
+                  <stop offset="100%" stop-color="#60110D"/>
+                </radialGradient>
+              </defs>
+              <circle cx="250" cy="250" r="235" fill="url(#crust-grad-2)" />
+              <g fill="#1F1007" opacity="0.85">
+                <ellipse cx="270" cy="20" rx="15" ry="7" transform="rotate(10, 270, 20)"/>
+                <ellipse cx="430" cy="130" rx="18" ry="8" transform="rotate(50, 430, 130)"/>
+                <ellipse cx="450" cy="300" rx="20" ry="9" transform="rotate(110, 450, 300)"/>
+                <ellipse cx="360" cy="430" rx="16" ry="8" transform="rotate(150, 360, 430)"/>
+                <ellipse cx="190" cy="460" rx="24" ry="9" transform="rotate(-170, 190, 460)"/>
+                <ellipse cx="60" cy="360" rx="18" ry="8" transform="rotate(-120, 60, 360)"/>
+                <ellipse cx="40" cy="200" rx="15" ry="7" transform="rotate(-70, 40, 200)"/>
+                <ellipse cx="120" cy="65" rx="17" ry="8" transform="rotate(-20, 120, 65)"/>
+              </g>
+              <circle cx="250" cy="250" r="172" fill="url(#sauce-grad-2)" />
+              <path d="M210 210 Q240 190 270 210 T300 240 Q250 260 210 210 Z" fill="#FDFBF5" opacity="0.75"/>
+              <path d="M170 280 Q210 250 250 280 T290 320 Q220 340 170 280 Z" fill="#FDFBF5" opacity="0.65"/>
+              <g>
+                <circle cx="210" cy="180" r="28" fill="#801C1A" stroke="#5E1110" stroke-width="2"/>
+                <circle cx="210" cy="180" r="23" fill="#962826"/>
+                <circle cx="295" cy="195" r="30" fill="#7A1816" stroke="#5E1110" stroke-width="2"/>
+                <circle cx="295" cy="195" r="25" fill="#912422"/>
+                <circle cx="250" cy="265" r="32" fill="#851F1D" stroke="#5E1110" stroke-width="2"/>
+                <circle cx="250" cy="265" r="27" fill="#9C2C2A"/>
+                <circle cx="170" cy="265" r="29" fill="#7D1917" stroke="#5E1110" stroke-width="2"/>
+                <circle cx="170" cy="265" r="24" fill="#942624"/>
+                <circle cx="330" cy="275" r="27" fill="#851F1D" stroke="#5E1110" stroke-width="2"/>
+                <circle cx="330" cy="275" r="22" fill="#9C2C2A"/>
+                <circle cx="215" cy="340" r="28" fill="#7A1816" stroke="#5E1110" stroke-width="2"/>
+                <circle cx="215" cy="340" r="23" fill="#912422"/>
+              </g>
+              <g stroke="#8A3459" stroke-width="3" stroke-linecap="round" fill="none">
+                <path d="M190 160 C210 140 240 150 250 170"/>
+                <path d="M260 175 C290 165 320 180 330 210"/>
+                <path d="M160 230 C150 260 170 290 190 300"/>
+                <path d="M230 240 C250 220 280 230 290 255"/>
+                <path d="M220 310 C240 295 270 300 280 325"/>
+              </g>
+              <circle cx="230" cy="210" r="2.5" fill="#38753B"/>
+              <circle cx="270" cy="280" r="2.5" fill="#38753B"/>
+              <circle cx="195" cy="290" r="2.5" fill="#38753B"/>
+              <circle cx="310" cy="230" r="2.5" fill="#38753B"/>
+            </svg>
           </div>
         </div>
 
-        <div class="w-full max-w-sm flex flex-col items-center text-center pb-2 z-20">
-          <h2 class="font-serif text-3xl sm:text-4xl tracking-wide font-normal text-white">Calabresa</h2>
-          <p class="text-xs text-canotto-gold uppercase tracking-[0.2em] font-medium mt-1 mb-2">Defumação Natural &bull; Cebola Roxa</p>
-          <p class="text-xs sm:text-sm text-white/70 font-light leading-relaxed px-4 line-clamp-2 sm:line-clamp-none">
-            Linguiça calabresa artesanal curada em fatias crocantes, molho San Marzano, lâminas finas de cebola roxa e leve toque de orégano fresco selvagem.
+        <!-- Painel de Detalhes Expansível -->
+        <div class="details-card absolute bottom-6 sm:bottom-8 w-[calc(100%-2rem)] max-w-md glass-panel rounded-3xl p-5 sm:p-6 z-20" onclick="event.stopPropagation()">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-[10px] uppercase tracking-[0.25em] text-canotto-gold font-medium block">02 &bull; Base Rossa</span>
+              <h2 class="font-serif text-3xl sm:text-4xl text-white font-normal tracking-wide mt-0.5">Madri</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase tracking-widest text-white/45 block">Individual</span>
+              <span class="font-serif text-2xl sm:text-3xl font-semibold text-canotto-gold">R$ 58,00</span>
+            </div>
+          </div>
+
+          <p class="mt-3 text-xs sm:text-sm text-white/80 font-light leading-relaxed">
+            Molho de tomate pelado, mozzarella Fior di Latte, linguiça calabresa artesanal curada em fatias finas, lâminas de cebola roxa e orégano.
           </p>
 
-          <div class="mt-4 flex items-center justify-between w-full px-4 pt-3 border-t border-white/10">
-            <div class="flex flex-col text-left">
-              <span class="text-[10px] uppercase tracking-wider text-white/50">Ultracongelada</span>
-              <span class="font-serif text-xl sm:text-2xl font-semibold text-canotto-gold">R$ 58,00</span>
-            </div>
-
-            <button onclick="orderPizza('Calabresa', 'R$ 58,00')" class="glass-pill bg-white/10 hover:bg-white/20 active:scale-95 text-white px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-medium flex items-center gap-2 border border-white/20 transition-all shadow-lg hover:border-canotto-gold">
-              <span>Pedir via WhatsApp</span>
-              <svg class="w-3.5 h-3.5 text-canotto-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <div class="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between gap-3">
+            <button type="button" onclick="togglePizzaDetails(1)" class="text-[11px] uppercase tracking-widest text-white/50 hover:text-white/80 transition-colors py-2 px-2">
+              Fechar
+            </button>
+            <button type="button" id="btn-add-madri" onclick="addToCart('madri')" class="flex-1 py-3 px-5 rounded-full bg-canotto-gold hover:bg-[#d4ab6e] active:scale-[0.98] text-[#111111] font-semibold text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 shadow-lg">
+              <span>Adicionar à Sacola</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
           </div>
         </div>
       </section>
 
-      <!-- PIZZA 3: LINGUIÇA DEFUMADA -->
-      <section class="snap-section" data-index="2" data-color="earth" data-flavor="Linguiça Defumada" data-price="R$ 60,00">
-        <div class="pt-4 flex flex-col items-center text-center opacity-85">
-          <span class="text-[10px] tracking-[0.3em] uppercase text-canotto-gold font-medium">03 &bull; Artesanal da Casa</span>
-        </div>
-
-        <div class="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square flex items-center justify-center my-auto cursor-pointer pizza-interactive-container">
+      <!-- 03 • AUSTIN -->
+      <section class="snap-section" data-index="2" data-id="austin" data-color="amber">
+        <div class="pizza-stage relative w-full max-w-[300px] sm:max-w-[360px] md:max-w-[390px] aspect-square flex items-center justify-center cursor-pointer pizza-interactive-container" onclick="togglePizzaDetails(2)" role="button" tabindex="0" aria-label="Ver detalhes da pizza Austin">
           <div class="pizza-shadow"></div>
-          <div class="floating-pizza w-full h-full flex items-center justify-center">
-            <img src="fotos/linguica.png" 
-                 alt="Pizza Linguiça Defumada" 
-                 class="w-full h-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105" 
-                 onerror="this.classList.add('hidden');" />
+          <div class="floating-pizza w-full h-full flex items-center justify-center relative">
+            <img src="fotos/austin.png"
+                 data-jpg="fotos/austin.jpg"
+                 data-alt-png="fotos/linguica.png"
+                 data-alt-jpg="fotos/linguica.jpg"
+                 alt="Pizza Austin"
+                 class="w-full h-full object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.65)] transition-transform duration-500 hover:scale-[1.03]"
+                 onerror="handlePizzaImageError(this)" />
+            <!-- Fallback SVG -->
+            <svg class="pizza-fallback-svg hidden w-full h-full drop-shadow-2xl transition-transform duration-500 hover:scale-[1.03]" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="crust-grad-3" cx="50%" cy="50%" r="50%">
+                  <stop offset="68%" stop-color="#C4843E"/>
+                  <stop offset="86%" stop-color="#92531D"/>
+                  <stop offset="94%" stop-color="#52290D"/>
+                  <stop offset="98%" stop-color="#231003"/>
+                </radialGradient>
+                <radialGradient id="sauce-grad-3" cx="50%" cy="50%" r="48%">
+                  <stop offset="0%" stop-color="#B5231C"/>
+                  <stop offset="68%" stop-color="#8C1B16"/>
+                  <stop offset="100%" stop-color="#5E100C"/>
+                </radialGradient>
+              </defs>
+              <circle cx="250" cy="250" r="235" fill="url(#crust-grad-3)" />
+              <g fill="#1F1007" opacity="0.85">
+                <ellipse cx="240" cy="22" rx="16" ry="7" transform="rotate(-5, 240, 22)"/>
+                <ellipse cx="405" cy="95" rx="18" ry="8" transform="rotate(42, 405, 95)"/>
+                <ellipse cx="458" cy="250" rx="17" ry="8" transform="rotate(92, 458, 250)"/>
+                <ellipse cx="385" cy="405" rx="21" ry="9" transform="rotate(142, 385, 405)"/>
+                <ellipse cx="220" cy="458" rx="18" ry="8" transform="rotate(175, 220, 458)"/>
+                <ellipse cx="75" cy="375" rx="19" ry="8" transform="rotate(-125, 75, 375)"/>
+                <ellipse cx="42" cy="215" rx="16" ry="7" transform="rotate(-75, 42, 215)"/>
+              </g>
+              <circle cx="250" cy="250" r="172" fill="url(#sauce-grad-3)" />
+              <!-- Mozzarella Fior di Latte & lascas de provolone curado -->
+              <g fill="#FAF3E3" opacity="0.88">
+                <path d="M185 185 C215 165 255 180 250 210 C245 235 195 230 185 185 Z"/>
+                <path d="M275 195 C305 180 340 200 330 230 C320 255 280 240 275 195 Z"/>
+                <path d="M165 275 C195 255 235 275 230 305 C225 330 175 315 165 275 Z"/>
+                <path d="M265 280 C300 265 335 285 325 315 C315 340 270 325 265 280 Z"/>
+              </g>
+              <!-- Linguiça artesanal defumada de pernil suíno -->
+              <g fill="#7D2922" stroke="#4F1510" stroke-width="2">
+                <circle cx="215" cy="195" r="22"/>
+                <circle cx="295" cy="215" r="24"/>
+                <circle cx="250" cy="255" r="25"/>
+                <circle cx="195" cy="295" r="23"/>
+                <circle cx="295" cy="300" r="22"/>
+                <circle cx="245" cy="335" r="20"/>
+              </g>
+              <!-- Lascas de provolone curado dourado -->
+              <g fill="#EED294" opacity="0.85">
+                <rect x="225" y="215" width="26" height="12" rx="4" transform="rotate(18 225 215)"/>
+                <rect x="265" y="250" width="28" height="12" rx="4" transform="rotate(-22 265 250)"/>
+                <rect x="195" y="245" width="25" height="11" rx="4" transform="rotate(35 195 245)"/>
+              </g>
+              <!-- Fios brilhantes de geleia de pimenta artesanal -->
+              <path d="M175 215 Q250 185 320 235 T210 315" stroke="#D9381E" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.9"/>
+              <circle cx="240" cy="225" r="2.5" fill="#FF6B4A"/>
+              <circle cx="280" cy="275" r="2.5" fill="#FF6B4A"/>
+            </svg>
           </div>
         </div>
 
-        <div class="w-full max-w-sm flex flex-col items-center text-center pb-2 z-20">
-          <h2 class="font-serif text-3xl sm:text-4xl tracking-wide font-normal text-white">Linguiça Defumada</h2>
-          <p class="text-xs text-canotto-gold uppercase tracking-[0.2em] font-medium mt-1 mb-2">Pernil Suíno &bull; Ervas Frescas</p>
-          <p class="text-xs sm:text-sm text-white/70 font-light leading-relaxed px-4 line-clamp-2 sm:line-clamp-none">
-            Linguiça artesanal defumada de pernil suíno temperada na casa, base cremosa de mozzarella Fior di Latte, molho San Marzano e toque de ervas finas.
+        <!-- Painel de Detalhes Expansível -->
+        <div class="details-card absolute bottom-6 sm:bottom-8 w-[calc(100%-2rem)] max-w-md glass-panel rounded-3xl p-5 sm:p-6 z-20" onclick="event.stopPropagation()">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-[10px] uppercase tracking-[0.25em] text-canotto-gold font-medium block">03 &bull; Base Rossa</span>
+              <h2 class="font-serif text-3xl sm:text-4xl text-white font-normal tracking-wide mt-0.5">Austin</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase tracking-widest text-white/45 block">Individual</span>
+              <span class="font-serif text-2xl sm:text-3xl font-semibold text-canotto-gold">R$ 60,00</span>
+            </div>
+          </div>
+
+          <p class="mt-3 text-xs sm:text-sm text-white/80 font-light leading-relaxed">
+            Molho San Marzano, mozzarella Fior di Latte, linguiça artesanal defumada de pernil suíno, queijo provolone curado em lascas e geleia de pimenta artesanal.
           </p>
 
-          <div class="mt-4 flex items-center justify-between w-full px-4 pt-3 border-t border-white/10">
-            <div class="flex flex-col text-left">
-              <span class="text-[10px] uppercase tracking-wider text-white/50">Ultracongelada</span>
-              <span class="font-serif text-xl sm:text-2xl font-semibold text-canotto-gold">R$ 60,00</span>
-            </div>
-
-            <button onclick="orderPizza('Linguiça Defumada', 'R$ 60,00')" class="glass-pill bg-white/10 hover:bg-white/20 active:scale-95 text-white px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-medium flex items-center gap-2 border border-white/20 transition-all shadow-lg hover:border-canotto-gold">
-              <span>Pedir via WhatsApp</span>
-              <svg class="w-3.5 h-3.5 text-canotto-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <div class="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between gap-3">
+            <button type="button" onclick="togglePizzaDetails(2)" class="text-[11px] uppercase tracking-widest text-white/50 hover:text-white/80 transition-colors py-2 px-2">
+              Fechar
+            </button>
+            <button type="button" id="btn-add-austin" onclick="addToCart('austin')" class="flex-1 py-3 px-5 rounded-full bg-canotto-gold hover:bg-[#d4ab6e] active:scale-[0.98] text-[#111111] font-semibold text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 shadow-lg">
+              <span>Adicionar à Sacola</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
           </div>
         </div>
       </section>
 
-      <!-- PIZZA 4: QUATTRO FORMAGGI -->
-      <section class="snap-section" data-index="3" data-color="cream" data-flavor="Quattro Formaggi" data-price="R$ 62,00">
-        <div class="pt-4 flex flex-col items-center text-center opacity-85">
-          <span class="text-[10px] tracking-[0.3em] uppercase text-canotto-gold font-medium">04 &bull; Selezione di Formaggi</span>
-        </div>
-
-        <div class="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square flex items-center justify-center my-auto cursor-pointer pizza-interactive-container">
+      <!-- 04 • CANOTTERIA -->
+      <section class="snap-section" data-index="3" data-id="canotteria" data-color="gold">
+        <div class="pizza-stage relative w-full max-w-[300px] sm:max-w-[360px] md:max-w-[390px] aspect-square flex items-center justify-center cursor-pointer pizza-interactive-container" onclick="togglePizzaDetails(3)" role="button" tabindex="0" aria-label="Ver detalhes da pizza Canotteria">
           <div class="pizza-shadow"></div>
-          <div class="floating-pizza w-full h-full flex items-center justify-center">
-            <img src="fotos/quattro.png" 
-                 alt="Pizza Quattro Formaggi" 
-                 class="w-full h-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105" 
-                 onerror="this.classList.add('hidden');" />
+          <div class="floating-pizza w-full h-full flex items-center justify-center relative">
+            <img src="fotos/canotteria-assinatura.png"
+                 data-jpg="fotos/canotteria-assinatura.jpg"
+                 data-alt-png="fotos/caramelizada.png"
+                 data-alt-jpg="fotos/caramelizada.jpg"
+                 alt="Pizza Canotteria"
+                 class="w-full h-full object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.65)] transition-transform duration-500 hover:scale-[1.03]"
+                 onerror="handlePizzaImageError(this)" />
+            <!-- Fallback SVG -->
+            <svg class="pizza-fallback-svg hidden w-full h-full drop-shadow-2xl transition-transform duration-500 hover:scale-[1.03]" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="crust-grad-4" cx="50%" cy="50%" r="50%">
+                  <stop offset="68%" stop-color="#C78A45"/>
+                  <stop offset="87%" stop-color="#9C5E24"/>
+                  <stop offset="94%" stop-color="#552B0E"/>
+                  <stop offset="98%" stop-color="#241103"/>
+                </radialGradient>
+                <radialGradient id="base-white-4" cx="50%" cy="50%" r="48%">
+                  <stop offset="0%" stop-color="#FAF5E8"/>
+                  <stop offset="70%" stop-color="#EADBBD"/>
+                  <stop offset="100%" stop-color="#D4B98E"/>
+                </radialGradient>
+              </defs>
+              <circle cx="250" cy="250" r="235" fill="url(#crust-grad-4)" />
+              <g fill="#1F1007" opacity="0.85">
+                <ellipse cx="230" cy="20" rx="17" ry="8" transform="rotate(-8, 230, 20)"/>
+                <ellipse cx="370" cy="70" rx="14" ry="7" transform="rotate(35, 370, 70)"/>
+                <ellipse cx="460" cy="230" rx="16" ry="8" transform="rotate(85, 460, 230)"/>
+                <ellipse cx="410" cy="370" rx="22" ry="9" transform="rotate(130, 410, 370)"/>
+                <ellipse cx="250" cy="460" rx="18" ry="7" transform="rotate(180, 250, 460)"/>
+                <ellipse cx="90" cy="410" rx="15" ry="8" transform="rotate(-130, 90, 410)"/>
+                <ellipse cx="35" cy="260" rx="19" ry="8" transform="rotate(-90, 35, 260)"/>
+              </g>
+              <circle cx="250" cy="250" r="172" fill="url(#base-white-4)" />
+              <!-- Gorgonzola dolce pockets -->
+              <g fill="#537A72" opacity="0.7">
+                <path d="M195 190 Q215 175 225 195 Q210 215 195 190 Z"/>
+                <path d="M295 185 Q315 170 325 190 Q310 210 295 185 Z"/>
+                <path d="M235 285 Q255 270 265 290 Q250 310 235 285 Z"/>
+                <path d="M175 270 Q195 255 205 275 Q190 295 175 270 Z"/>
+              </g>
+              <!-- Cebola caramelizada no balsâmico italiano -->
+              <g stroke="#4A2012" stroke-width="4.5" stroke-linecap="round" fill="none" opacity="0.88">
+                <path d="M180 210 C215 185 245 205 265 185"/>
+                <path d="M240 245 C275 225 310 245 325 220"/>
+                <path d="M170 285 C205 265 240 285 265 265"/>
+                <path d="M225 320 C260 300 295 320 315 295"/>
+              </g>
+              <!-- Toque de nozes tostadas -->
+              <g fill="#7C4D25" stroke="#4E2E12" stroke-width="1.5">
+                <ellipse cx="225" cy="225" rx="10" ry="7" transform="rotate(20 225 225)"/>
+                <ellipse cx="285" cy="235" rx="11" ry="7.5" transform="rotate(-15 285 235)"/>
+                <ellipse cx="215" cy="295" rx="10" ry="7" transform="rotate(35 215 295)"/>
+                <ellipse cx="285" cy="290" rx="9.5" ry="6.5" transform="rotate(-25 285 290)"/>
+              </g>
+            </svg>
           </div>
         </div>
 
-        <div class="w-full max-w-sm flex flex-col items-center text-center pb-2 z-20">
-          <h2 class="font-serif text-3xl sm:text-4xl tracking-wide font-normal text-white">Quattro Formaggi</h2>
-          <p class="text-xs text-canotto-gold uppercase tracking-[0.2em] font-medium mt-1 mb-2">Queijos Selecionados &bull; Toque de Mel</p>
-          <p class="text-xs sm:text-sm text-white/70 font-light leading-relaxed px-4 line-clamp-2 sm:line-clamp-none">
-            Harmonia de Fior di Latte, queijo Fontina cremoso, Gorgonzola Dolce italiano, lascas de Grana Padano 16 meses e sutil fio de mel silvestre.
+        <!-- Painel de Detalhes Expansível -->
+        <div class="details-card absolute bottom-6 sm:bottom-8 w-[calc(100%-2rem)] max-w-md glass-panel rounded-3xl p-5 sm:p-6 z-20" onclick="event.stopPropagation()">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-[10px] uppercase tracking-[0.25em] text-canotto-gold font-medium block">04 &bull; Assinatura da Casa</span>
+              <h2 class="font-serif text-3xl sm:text-4xl text-white font-normal tracking-wide mt-0.5">Canotteria</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase tracking-widest text-white/45 block">Individual</span>
+              <span class="font-serif text-2xl sm:text-3xl font-semibold text-canotto-gold">R$ 64,00</span>
+            </div>
+          </div>
+
+          <p class="mt-3 text-xs sm:text-sm text-white/80 font-light leading-relaxed">
+            Base bianca suave, mozzarella Fior di Latte fresca, cebola lentamente caramelizada no balsâmico italiano, queijo gorgonzola dolce e toque de nozes tostadas.
           </p>
 
-          <div class="mt-4 flex items-center justify-between w-full px-4 pt-3 border-t border-white/10">
-            <div class="flex flex-col text-left">
-              <span class="text-[10px] uppercase tracking-wider text-white/50">Ultracongelada</span>
-              <span class="font-serif text-xl sm:text-2xl font-semibold text-canotto-gold">R$ 62,00</span>
-            </div>
-
-            <button onclick="orderPizza('Quattro Formaggi', 'R$ 62,00')" class="glass-pill bg-white/10 hover:bg-white/20 active:scale-95 text-white px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-medium flex items-center gap-2 border border-white/20 transition-all shadow-lg hover:border-canotto-gold">
-              <span>Pedir via WhatsApp</span>
-              <svg class="w-3.5 h-3.5 text-canotto-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <div class="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between gap-3">
+            <button type="button" onclick="togglePizzaDetails(3)" class="text-[11px] uppercase tracking-widest text-white/50 hover:text-white/80 transition-colors py-2 px-2">
+              Fechar
+            </button>
+            <button type="button" id="btn-add-canotteria" onclick="addToCart('canotteria')" class="flex-1 py-3 px-5 rounded-full bg-canotto-gold hover:bg-[#d4ab6e] active:scale-[0.98] text-[#111111] font-semibold text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 shadow-lg">
+              <span>Adicionar à Sacola</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
           </div>
         </div>
       </section>
 
-      <!-- PIZZA 5: CEBOLA CARAMELIZADA -->
-      <section class="snap-section" data-index="4" data-color="gold" data-flavor="Cebola Caramelizada" data-price="R$ 64,00">
-        <div class="pt-4 flex flex-col items-center text-center opacity-85">
-          <span class="text-[10px] tracking-[0.3em] uppercase text-canotto-gold font-medium">05 &bull; Doçura & Contraste</span>
-        </div>
-
-        <div class="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square flex items-center justify-center my-auto cursor-pointer pizza-interactive-container">
+      <!-- 05 • LYON -->
+      <section class="snap-section" data-index="4" data-id="lyon" data-color="cream">
+        <div class="pizza-stage relative w-full max-w-[300px] sm:max-w-[360px] md:max-w-[390px] aspect-square flex items-center justify-center cursor-pointer pizza-interactive-container" onclick="togglePizzaDetails(4)" role="button" tabindex="0" aria-label="Ver detalhes da pizza Lyon">
           <div class="pizza-shadow"></div>
-          <div class="floating-pizza w-full h-full flex items-center justify-center">
-            <img src="fotos/caramelizada.png" 
-                 alt="Pizza Cebola Caramelizada" 
-                 class="w-full h-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105" 
-                 onerror="this.classList.add('hidden');" />
+          <div class="floating-pizza w-full h-full flex items-center justify-center relative">
+            <img src="fotos/quattro-formaggi.png"
+                 data-jpg="fotos/quattro-formaggi.jpg"
+                 data-alt-png="fotos/quattro.png"
+                 data-alt-jpg="fotos/quattro.jpg"
+                 alt="Pizza Lyon"
+                 class="w-full h-full object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.65)] transition-transform duration-500 hover:scale-[1.03]"
+                 onerror="handlePizzaImageError(this)" />
+            <!-- Fallback SVG -->
+            <svg class="pizza-fallback-svg hidden w-full h-full drop-shadow-2xl transition-transform duration-500 hover:scale-[1.03]" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="crust-grad-5" cx="50%" cy="50%" r="50%">
+                  <stop offset="68%" stop-color="#C58943"/>
+                  <stop offset="86%" stop-color="#94551E"/>
+                  <stop offset="94%" stop-color="#552B0E"/>
+                  <stop offset="98%" stop-color="#241103"/>
+                </radialGradient>
+                <radialGradient id="cheese-grad-5" cx="48%" cy="48%" r="48%">
+                  <stop offset="0%" stop-color="#FFFDF7"/>
+                  <stop offset="45%" stop-color="#FAF1D9"/>
+                  <stop offset="80%" stop-color="#EEDAA8"/>
+                  <stop offset="100%" stop-color="#DCBE7F"/>
+                </radialGradient>
+              </defs>
+              <circle cx="250" cy="250" r="235" fill="url(#crust-grad-5)" />
+              <g fill="#1F1007" opacity="0.85">
+                <ellipse cx="210" cy="22" rx="16" ry="7" transform="rotate(-15, 210, 22)"/>
+                <ellipse cx="390" cy="90" rx="18" ry="8" transform="rotate(35, 390, 90)"/>
+                <ellipse cx="455" cy="210" rx="15" ry="7" transform="rotate(80, 455, 210)"/>
+                <ellipse cx="420" cy="350" rx="21" ry="9" transform="rotate(125, 420, 350)"/>
+                <ellipse cx="270" cy="455" rx="19" ry="8" transform="rotate(170, 270, 455)"/>
+                <ellipse cx="110" cy="430" rx="17" ry="8" transform="rotate(-140, 110, 430)"/>
+                <ellipse cx="45" cy="300" rx="20" ry="8" transform="rotate(-95, 45, 300)"/>
+              </g>
+              <circle cx="250" cy="250" r="172" fill="url(#cheese-grad-5)" />
+              <!-- Gorgonzola Dolce cremoso -->
+              <g fill="#437775" opacity="0.72">
+                <path d="M190 190 Q205 180 215 195 Q205 210 190 190 Z"/>
+                <path d="M300 170 Q315 160 325 175 Q310 190 300 170 Z"/>
+                <path d="M230 290 Q245 275 260 290 Q245 305 230 290 Z"/>
+                <path d="M310 270 Q325 255 335 275 Q320 290 310 270 Z"/>
+                <path d="M160 260 Q175 250 180 270 Q165 280 160 260 Z"/>
+              </g>
+              <!-- Queijo provolone curado & parmesão maturado ralado fino -->
+              <g fill="#E6C87C" opacity="0.75">
+                <circle cx="240" cy="210" r="4"/>
+                <circle cx="275" cy="235" r="4.5"/>
+                <circle cx="220" cy="250" r="3.5"/>
+                <circle cx="280" cy="310" r="4"/>
+                <circle cx="185" cy="230" r="3.5"/>
+                <circle cx="255" cy="185" r="3.5"/>
+              </g>
+            </svg>
           </div>
         </div>
 
-        <div class="w-full max-w-sm flex flex-col items-center text-center pb-2 z-20">
-          <h2 class="font-serif text-3xl sm:text-4xl tracking-wide font-normal text-white">Cebola Caramelizada</h2>
-          <p class="text-xs text-canotto-gold uppercase tracking-[0.2em] font-medium mt-1 mb-2">Base Bianca &bull; Balsâmico Reduzido</p>
-          <p class="text-xs sm:text-sm text-white/70 font-light leading-relaxed px-4 line-clamp-2 sm:line-clamp-none">
-            Cebolas roxas lentamente caramelizadas no balsâmico italiano, base cremosa de mozzarella Fior di Latte fresca, queijo nobre e leve perfume de tomilho.
+        <!-- Painel de Detalhes Expansível -->
+        <div class="details-card absolute bottom-6 sm:bottom-8 w-[calc(100%-2rem)] max-w-md glass-panel rounded-3xl p-5 sm:p-6 z-20" onclick="event.stopPropagation()">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-[10px] uppercase tracking-[0.25em] text-canotto-gold font-medium block">05 &bull; Base Bianca</span>
+              <h2 class="font-serif text-3xl sm:text-4xl text-white font-normal tracking-wide mt-0.5">Lyon</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase tracking-widest text-white/45 block">Individual</span>
+              <span class="font-serif text-2xl sm:text-3xl font-semibold text-canotto-gold">R$ 62,00</span>
+            </div>
+          </div>
+
+          <p class="mt-3 text-xs sm:text-sm text-white/80 font-light leading-relaxed">
+            Base bianca com mozzarella Fior di Latte, queijo provolone curado, queijo gorgonzola dolce cremoso e parmesão maturado ralado fino.
           </p>
 
-          <div class="mt-4 flex items-center justify-between w-full px-4 pt-3 border-t border-white/10">
-            <div class="flex flex-col text-left">
-              <span class="text-[10px] uppercase tracking-wider text-white/50">Ultracongelada</span>
-              <span class="font-serif text-xl sm:text-2xl font-semibold text-canotto-gold">R$ 64,00</span>
-            </div>
-
-            <button onclick="orderPizza('Cebola Caramelizada', 'R$ 64,00')" class="glass-pill bg-white/10 hover:bg-white/20 active:scale-95 text-white px-5 py-2.5 rounded-full text-xs uppercase tracking-wider font-medium flex items-center gap-2 border border-white/20 transition-all shadow-lg hover:border-canotto-gold">
-              <span>Pedir via WhatsApp</span>
-              <svg class="w-3.5 h-3.5 text-canotto-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <div class="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between gap-3">
+            <button type="button" onclick="togglePizzaDetails(4)" class="text-[11px] uppercase tracking-widest text-white/50 hover:text-white/80 transition-colors py-2 px-2">
+              Fechar
+            </button>
+            <button type="button" id="btn-add-lyon" onclick="addToCart('lyon')" class="flex-1 py-3 px-5 rounded-full bg-canotto-gold hover:bg-[#d4ab6e] active:scale-[0.98] text-[#111111] font-semibold text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 shadow-lg">
+              <span>Adicionar à Sacola</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
           </div>
         </div>
@@ -400,174 +728,361 @@
     </div>
   </main>
 
-  <!-- MODAL: Instruções de Preparo da Pizza Congelada -->
-  <div id="modal-prep" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-all duration-300">
-    <div id="modal-backdrop" class="absolute inset-0 bg-black/75 backdrop-blur-md"></div>
-    <div class="relative w-full max-w-md bg-[#161514] border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl text-white transform translate-y-8 transition-transform duration-300">
-      <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-4 sm:hidden"></div>
+  <!-- 5. GAVETA / MODAL LATERAL DO CARRINHO E DISPARO PARA WHATSAPP -->
+  <div id="cart-modal" class="fixed inset-0 z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+    <!-- Backdrop -->
+    <div id="cart-backdrop" onclick="closeCart()" class="absolute inset-0 bg-black/75 backdrop-blur-sm"></div>
 
-      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+    <!-- Drawer Lateral -->
+    <aside id="cart-drawer" class="absolute top-0 right-0 h-full w-full max-w-md bg-[#141211] border-l border-white/10 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out">
+      <!-- Cabeçalho do Carrinho -->
+      <div class="p-6 border-b border-white/10 flex items-center justify-between">
         <div>
-          <h3 class="font-serif text-2xl font-normal text-white">Como Assar em Casa</h3>
-          <p class="text-[11px] uppercase tracking-wider text-canotto-gold">O Segredo da Borda Canotto Perfeita</p>
+          <span class="text-[10px] uppercase tracking-[0.28em] text-canotto-gold block">Seu Pedido</span>
+          <h3 class="font-serif text-2xl sm:text-3xl text-white font-normal mt-0.5">Sacola Canotteria</h3>
         </div>
-        <button id="btn-close-prep" class="p-2 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button id="btn-close-cart" type="button" onclick="closeCart()" class="w-9 h-9 rounded-full glass-pill flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label="Fechar carrinho">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       </div>
 
-      <div class="py-4 space-y-3.5 text-xs text-white/80 leading-relaxed font-light">
-        <div class="flex gap-3 items-start">
-          <span class="w-5 h-5 rounded-full bg-canotto-gold/20 text-canotto-gold flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">1</span>
-          <p><strong class="font-semibold text-white">Pré-aqueça no máximo:</strong> Aqueça o forno na temperatura máxima (250°C a 280°C) por pelo menos 20 minutos com a forma ou pedra refratária dentro.</p>
-        </div>
-        <div class="flex gap-3 items-start">
-          <span class="w-5 h-5 rounded-full bg-canotto-gold/20 text-canotto-gold flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">2</span>
-          <p><strong class="font-semibold text-white">Direto do freezer:</strong> Tire o filme protetor e coloque a pizza congelada diretamente sobre a grade ou superfície quente.</p>
-        </div>
-        <div class="flex gap-3 items-start">
-          <span class="w-5 h-5 rounded-full bg-canotto-gold/20 text-canotto-gold flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">3</span>
-          <p><strong class="font-semibold text-white">6 a 8 minutos:</strong> Asse até o queijo borbulhar intensamente e as manchas tostadas da borda reativarem o aroma de forno a lenha.</p>
-        </div>
+      <!-- Lista de Itens Adicionados -->
+      <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+        <!-- Preenchido dinamicamente via JS -->
       </div>
 
-      <div class="pt-3">
-        <button id="btn-close-prep-ok" class="w-full py-2.5 rounded-full bg-canotto-gold text-[#141210] font-semibold text-xs uppercase tracking-wider hover:bg-[#d8b074] transition-colors">
-          Entendi, vamos às pizzas
+      <!-- Rodapé com Subtotal e Botão Finalizar Pedido no WhatsApp -->
+      <div class="p-6 border-t border-white/10 bg-[#181615]/90 space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-[0.2em] text-white/60">Subtotal do Pedido</span>
+          <span id="cart-subtotal" class="font-serif text-2xl sm:text-3xl font-semibold text-canotto-gold">R$ 0,00</span>
+        </div>
+
+        <button id="btn-checkout-whatsapp" type="button" onclick="checkoutWhatsApp()" class="w-full py-3.5 px-6 rounded-full bg-[#25D366] hover:bg-[#20bd5a] active:scale-[0.99] text-[#0c0b0b] font-semibold text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2.5 shadow-lg disabled:opacity-40 disabled:pointer-events-none">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          <span>Finalizar Pedido no WhatsApp</span>
         </button>
       </div>
-    </div>
+    </aside>
   </div>
 
   <script>
-    const colorThemes = {
-      rosso: 'radial-gradient(circle at 50% 45%, rgba(143, 29, 24, 0.45) 0%, rgba(55, 12, 10, 0.25) 50%, rgba(12, 11, 11, 0) 75%)',
-      gold: 'radial-gradient(circle at 50% 45%, rgba(197, 155, 95, 0.38) 0%, rgba(85, 55, 20, 0.22) 50%, rgba(12, 11, 11, 0) 75%)',
-      terracotta: 'radial-gradient(circle at 50% 45%, rgba(168, 62, 38, 0.42) 0%, rgba(68, 22, 12, 0.25) 50%, rgba(12, 11, 11, 0) 75%)',
-      cream: 'radial-gradient(circle at 50% 45%, rgba(180, 160, 120, 0.35) 0%, rgba(70, 60, 40, 0.2) 50%, rgba(12, 11, 11, 0) 75%)',
-      earth: 'radial-gradient(circle at 50% 45%, rgba(110, 85, 60, 0.42) 0%, rgba(45, 35, 25, 0.25) 50%, rgba(12, 11, 11, 0) 75%)'
+    // Catálogo Oficial dos 5 Sabores (Conforme Planilha 4 - Sabores / Ficha Técnica)
+    const PIZZAS = {
+      napoli: {
+        id: 'napoli',
+        number: '01',
+        name: 'Napoli',
+        subtitle: 'Base Rossa',
+        price: 54.00,
+        ingredients: 'Molho de tomate pelado artesanal San Marzano D.O.P., mozzarella Fior di Latte fresca, folhas de manjericão fresco e azeite extravirgem.',
+        photo: 'fotos/margherita.png'
+      },
+      madri: {
+        id: 'madri',
+        number: '02',
+        name: 'Madri',
+        subtitle: 'Base Rossa',
+        price: 58.00,
+        ingredients: 'Molho de tomate pelado, mozzarella Fior di Latte, linguiça calabresa artesanal curada em fatias finas, lâminas de cebola roxa e orégano.',
+        photo: 'fotos/calabresa-artesanal.png'
+      },
+      austin: {
+        id: 'austin',
+        number: '03',
+        name: 'Austin',
+        subtitle: 'Base Rossa',
+        price: 60.00,
+        ingredients: 'Molho San Marzano, mozzarella Fior di Latte, linguiça artesanal defumada de pernil suíno, queijo provolone curado em lascas e geleia de pimenta artesanal.',
+        photo: 'fotos/austin.png'
+      },
+      canotteria: {
+        id: 'canotteria',
+        number: '04',
+        name: 'Canotteria',
+        subtitle: 'Assinatura da Casa',
+        price: 64.00,
+        ingredients: 'Base bianca suave, mozzarella Fior di Latte fresca, cebola lentamente caramelizada no balsâmico italiano, queijo gorgonzola dolce e toque de nozes tostadas.',
+        photo: 'fotos/canotteria-assinatura.png'
+      },
+      lyon: {
+        id: 'lyon',
+        number: '05',
+        name: 'Lyon',
+        subtitle: 'Base Bianca',
+        price: 62.00,
+        ingredients: 'Base bianca com mozzarella Fior di Latte, queijo provolone curado, queijo gorgonzola dolce cremoso e parmesão maturado ralado fino.',
+        photo: 'fotos/quattro-formaggi.png'
+      }
     };
+
+    const WHATSAPP_NUMBER = '5551998111406';
+
+    // Paletas dinâmicas de fundo por seção (Skylrk-inspired)
+    const colorThemes = {
+      rosso: 'radial-gradient(circle at 50% 45%, rgba(143, 29, 24, 0.46) 0%, rgba(55, 12, 10, 0.24) 52%, rgba(13, 12, 12, 0) 76%)',
+      terracotta: 'radial-gradient(circle at 50% 45%, rgba(168, 58, 34, 0.44) 0%, rgba(68, 22, 12, 0.24) 52%, rgba(13, 12, 12, 0) 76%)',
+      amber: 'radial-gradient(circle at 50% 45%, rgba(155, 72, 28, 0.44) 0%, rgba(62, 26, 12, 0.24) 52%, rgba(13, 12, 12, 0) 76%)',
+      gold: 'radial-gradient(circle at 50% 45%, rgba(197, 155, 95, 0.38) 0%, rgba(82, 54, 22, 0.22) 52%, rgba(13, 12, 12, 0) 76%)',
+      cream: 'radial-gradient(circle at 50% 45%, rgba(175, 152, 112, 0.36) 0%, rgba(68, 58, 40, 0.20) 52%, rgba(13, 12, 12, 0) 76%)'
+    };
+
+    // Estado do Carrinho: { napoli: 0, madri: 0, ... }
+    const cart = {};
 
     const scroller = document.getElementById('pizza-scroller');
     const sections = document.querySelectorAll('.snap-section');
     const ambientBg = document.getElementById('ambient-bg');
     const dotsContainer = document.getElementById('dots-container');
-    const appWrapper = document.getElementById('app-wrapper');
-    const btnToggleFrame = document.getElementById('btn-toggle-frame');
-    const btnFrameText = document.getElementById('btn-frame-text');
+    const cartBadge = document.getElementById('cart-badge');
+    const cartModal = document.getElementById('cart-modal');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    const cartSubtotalEl = document.getElementById('cart-subtotal');
+    const btnCheckoutWhatsapp = document.getElementById('btn-checkout-whatsapp');
 
-    let isFrameActive = false;
     let currentIndex = 0;
 
+    // Fallback inteligente de imagem: .png -> .jpg -> nome alternativo na pasta fotos/ -> SVG artesanal
+    window.handlePizzaImageError = function(imgEl) {
+      const step = parseInt(imgEl.getAttribute('data-fallback-step') || '0', 10);
+      if (step === 0 && imgEl.getAttribute('data-jpg')) {
+        imgEl.setAttribute('data-fallback-step', '1');
+        imgEl.src = imgEl.getAttribute('data-jpg');
+      } else if (step <= 1 && imgEl.getAttribute('data-alt-png')) {
+        imgEl.setAttribute('data-fallback-step', '2');
+        imgEl.src = imgEl.getAttribute('data-alt-png');
+      } else if (step <= 2 && imgEl.getAttribute('data-alt-jpg')) {
+        imgEl.setAttribute('data-fallback-step', '3');
+        imgEl.src = imgEl.getAttribute('data-alt-jpg');
+      } else {
+        imgEl.classList.add('hidden');
+        const svgFallback = imgEl.parentElement.querySelector('.pizza-fallback-svg');
+        if (svgFallback) {
+          svgFallback.classList.remove('hidden');
+        }
+      }
+    };
+
+    // Formatador de moeda BRL
+    function formatBRL(value) {
+      return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    // Construir indicadores laterais de navegação
     sections.forEach((sec, idx) => {
       const dot = document.createElement('button');
-      dot.className = `w-1.5 rounded-full transition-all duration-300 ${idx === 0 ? 'h-6 bg-canotto-gold' : 'h-1.5 bg-white/30 hover:bg-white/60'}`;
-      dot.setAttribute('aria-label', `Pizza ${idx + 1}`);
-      dot.onclick = () => scrollToIndex(idx);
+      dot.type = 'button';
+      dot.className = `w-1.5 rounded-full transition-all duration-300 ${idx === 0 ? 'h-6 bg-canotto-gold' : 'h-1.5 bg-white/25 hover:bg-white/60'}`;
+      dot.setAttribute('aria-label', `Ir para pizza ${idx + 1}`);
+      dot.addEventListener('click', () => scrollToIndex(idx));
       dotsContainer.appendChild(dot);
     });
 
     function updateDots(activeIdx) {
       const dots = dotsContainer.children;
       for (let i = 0; i < dots.length; i++) {
-        if (i === activeIdx) {
-          dots[i].className = 'w-1.5 h-6 rounded-full bg-canotto-gold transition-all duration-300';
-        } else {
-          dots[i].className = 'w-1.5 h-1.5 rounded-full bg-white/30 hover:bg-white/60 transition-all duration-300';
-        }
+        dots[i].className = i === activeIdx
+          ? 'w-1.5 h-6 rounded-full bg-canotto-gold transition-all duration-300'
+          : 'w-1.5 h-1.5 rounded-full bg-white/25 hover:bg-white/60 transition-all duration-300';
       }
     }
 
-    function scrollToIndex(index) {
+    window.scrollToIndex = function(index) {
       if (sections[index]) {
         sections[index].scrollIntoView({ behavior: 'smooth' });
       }
-    }
-
-    const observerOptions = {
-      root: scroller,
-      threshold: 0.6
     };
 
+    // Expandir / fechar card de detalhes ao clicar na pizza
+    window.togglePizzaDetails = function(index) {
+      const targetSection = sections[index];
+      if (!targetSection) return;
+      const isOpen = targetSection.classList.contains('details-open');
+      sections.forEach(sec => sec.classList.remove('details-open'));
+      if (!isOpen) {
+        targetSection.classList.add('details-open');
+      }
+    };
+
+    // Fechar painel aberto ao clicar no fundo vazio da seção
+    sections.forEach((sec) => {
+      sec.addEventListener('click', (e) => {
+        if (e.target === sec && sec.classList.contains('details-open')) {
+          sec.classList.remove('details-open');
+        }
+      });
+    });
+
+    // Observer para atualizar fundo dinâmico e indicadores ao rolar
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const index = parseInt(entry.target.getAttribute('data-index'), 10);
           const colorKey = entry.target.getAttribute('data-color');
+          if (currentIndex !== index) {
+            sections.forEach((sec, idx) => {
+              if (idx !== index) sec.classList.remove('details-open');
+            });
+          }
           currentIndex = index;
-
           if (colorThemes[colorKey]) {
             ambientBg.style.background = colorThemes[colorKey];
           }
-
           updateDots(index);
         }
       });
-    }, observerOptions);
+    }, { root: scroller, threshold: 0.6 });
 
     sections.forEach(sec => observer.observe(sec));
     ambientBg.style.background = colorThemes['rosso'];
 
-    window.orderPizza = function(flavor, price) {
-      const phone = "5551999999999";
-      const message = `Olá Canotteria! Gostaria de encomendar a pizza congelada artesanal: *${flavor}* (${price}). Como funciona a entrega para esta semana?`;
-      const encoded = encodeURIComponent(message);
-      const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
-      window.open(url, '_blank');
-    };
-
-    if (btnToggleFrame) {
-      btnToggleFrame.addEventListener('click', () => {
-        isFrameActive = !isFrameActive;
-        if (isFrameActive) {
-          appWrapper.classList.add('phone-simulator-frame');
-          btnFrameText.textContent = "Tela Cheia";
-        } else {
-          appWrapper.classList.remove('phone-simulator-frame');
-          btnFrameText.textContent = "Modo Mobile";
-        }
-      });
-    }
-
-    const interactiveContainers = document.querySelectorAll('.pizza-interactive-container');
-    interactiveContainers.forEach(container => {
+    // Efeito 3D sutil ao mover o cursor sobre a pizza
+    document.querySelectorAll('.pizza-interactive-container').forEach(container => {
       const pizza = container.querySelector('.floating-pizza');
       container.addEventListener('mousemove', (e) => {
         const rect = container.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        const rotX = (y / (rect.height / 2)) * -14;
-        const rotY = (x / (rect.width / 2)) * 14;
-        pizza.style.transform = `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.05)`;
+        const rotX = (y / (rect.height / 2)) * -10;
+        const rotY = (x / (rect.width / 2)) * 10;
+        pizza.style.transform = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
       });
       container.addEventListener('mouseleave', () => {
         pizza.style.transform = '';
       });
+      container.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const idx = parseInt(container.closest('.snap-section').getAttribute('data-index'), 10);
+          togglePizzaDetails(idx);
+        }
+      });
     });
 
-    const modalPrep = document.getElementById('modal-prep');
-    const btnOpenPrep = document.getElementById('btn-open-prep');
-    const btnClosePrep = document.getElementById('btn-close-prep');
-    const btnClosePrepOk = document.getElementById('btn-close-prep-ok');
-    const modalBackdrop = document.getElementById('modal-backdrop');
+    // Lógica do Carrinho de Compras
+    window.addToCart = function(pizzaId) {
+      if (!PIZZAS[pizzaId]) return;
+      cart[pizzaId] = (cart[pizzaId] || 0) + 1;
+      renderCart();
 
-    function openModal() {
-      modalPrep.classList.remove('opacity-0', 'pointer-events-none');
-      const box = modalPrep.querySelector('.relative');
-      box.classList.remove('translate-y-8');
+      // Animação no badge do topo
+      cartBadge.classList.remove('badge-pop');
+      void cartBadge.offsetWidth;
+      cartBadge.classList.add('badge-pop');
+
+      // Feedback tátil e visual no botão da pizza
+      const btn = document.getElementById(`btn-add-${pizzaId}`);
+      if (btn) {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<span>Adicionado à Sacola</span><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>`;
+        btn.classList.add('bg-white', 'text-[#111111]');
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove('bg-white');
+        }, 900);
+      }
+    };
+
+    window.updateCartQuantity = function(pizzaId, delta) {
+      if (!cart[pizzaId]) return;
+      cart[pizzaId] += delta;
+      if (cart[pizzaId] <= 0) {
+        delete cart[pizzaId];
+      }
+      renderCart();
+    };
+
+    function renderCart() {
+      const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+      const totalCount = entries.reduce((acc, [, qty]) => acc + qty, 0);
+      const subtotal = entries.reduce((acc, [id, qty]) => acc + (PIZZAS[id].price * qty), 0);
+
+      cartBadge.textContent = totalCount;
+      cartSubtotalEl.textContent = formatBRL(subtotal);
+      btnCheckoutWhatsapp.disabled = totalCount === 0;
+
+      if (entries.length === 0) {
+        cartItemsContainer.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center py-12 opacity-60">
+            <svg class="w-12 h-12 text-canotto-gold/60 mb-3" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+            </svg>
+            <p class="font-serif text-xl text-white">Sua sacola está vazia</p>
+            <p class="text-xs text-white/60 mt-1 max-w-[220px]">Toque em qualquer pizza no cardápio para ver os ingredientes e adicionar ao seu pedido.</p>
+          </div>
+        `;
+        return;
+      }
+
+      cartItemsContainer.innerHTML = entries.map(([id, qty]) => {
+        const item = PIZZAS[id];
+        const itemSubtotal = item.price * qty;
+        return `
+          <div class="glass-pill rounded-2xl p-4 flex items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <span class="text-[10px] uppercase tracking-[0.22em] text-canotto-gold block">${item.number} &bull; ${item.subtitle}</span>
+              <h4 class="font-serif text-xl text-white font-normal truncate">${item.name}</h4>
+              <p class="text-xs text-white/60 mt-0.5">${formatBRL(item.price)} un. &bull; <strong class="text-canotto-gold font-medium">${formatBRL(itemSubtotal)}</strong></p>
+            </div>
+            <div class="flex items-center gap-2 bg-black/40 border border-white/10 rounded-full px-2 py-1">
+              <button type="button" onclick="updateCartQuantity('${id}', -1)" class="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 transition-colors" aria-label="Diminuir quantidade">
+                &minus;
+              </button>
+              <span class="w-5 text-center text-xs font-semibold text-white">${qty}</span>
+              <button type="button" onclick="updateCartQuantity('${id}', 1)" class="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 transition-colors" aria-label="Aumentar quantidade">
+                +
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
-    function closeModal() {
-      const box = modalPrep.querySelector('.relative');
-      box.classList.add('translate-y-8');
-      modalPrep.classList.add('opacity-0', 'pointer-events-none');
-    }
+    window.openCart = function() {
+      renderCart();
+      cartModal.classList.remove('pointer-events-none', 'opacity-0');
+      cartDrawer.classList.remove('translate-x-full');
+    };
 
-    btnOpenPrep.addEventListener('click', openModal);
-    btnClosePrep.addEventListener('click', closeModal);
-    btnClosePrepOk.addEventListener('click', closeModal);
-    modalBackdrop.addEventListener('click', closeModal);
+    window.closeCart = function() {
+      cartDrawer.classList.add('translate-x-full');
+      cartModal.classList.add('pointer-events-none', 'opacity-0');
+    };
 
+    // Disparo do Pedido Formatado para o WhatsApp (51998111406 / 5551998111406)
+    window.checkoutWhatsApp = function() {
+      const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+      if (entries.length === 0) return;
+
+      let total = 0;
+      const lines = [
+        'Olá, *Canotteria*! Gostaria de finalizar meu pedido pelo cardápio digital:',
+        ''
+      ];
+
+      entries.forEach(([id, qty]) => {
+        const item = PIZZAS[id];
+        const sub = item.price * qty;
+        total += sub;
+        lines.push(`• *${qty}x ${item.name}* (${item.subtitle}) — ${formatBRL(sub)}`);
+      });
+
+      lines.push('');
+      lines.push(`*Total Geral: ${formatBRL(total)}*`);
+      lines.push('');
+      lines.push('Aguardo confirmação. Obrigado!');
+
+      const encodedText = encodeURIComponent(lines.join('\n'));
+      const url = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedText}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    // Navegação por teclado
     window.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -576,10 +1091,13 @@
         e.preventDefault();
         if (currentIndex > 0) scrollToIndex(currentIndex - 1);
       } else if (e.key === 'Escape') {
-        closeModal();
+        closeCart();
+        sections.forEach(sec => sec.classList.remove('details-open'));
       }
     });
+
+    // Inicializar estado do carrinho
+    renderCart();
   </script>
 </body>
 </html>
-Exibindo index.html… 
